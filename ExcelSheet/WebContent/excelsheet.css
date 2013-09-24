@@ -1,0 +1,46 @@
+@CHARSET "ISO-8859-1";
+#mainTable{
+	border:1px solid #CCC;
+	padding:0;
+	margin:0;
+	border-collapse: collapse;
+	border-spacing:0;
+	border-color:#CCC;
+	box-shadow:2px 2px 5px #240
+}
+body{
+	margin-top:0;
+}
+td{padding:0;margin:0;background:transparent;
+	border:1px solid #CCC;
+	min-width:90px;
+	min-height:15px;
+	text-align:left;
+}
+th{background-color:#CEC;text-align:center;
+border-right:1px solid #CCC;
+cursor:pointer;
+}
+th:FIRST-CHILD{background-color:#AAA;
+width:15px;min-width:15px}
+td:FIRST-CHILD {
+	background-color:#DEB;
+	border-left:1px solid #CCC;
+	text-align:center;
+	width:15px;
+	min-width:15px
+}
+tr:HOVER td{
+	background-color: #EAEAFA;
+}
+button{margin:5px 2px;}
+td input{border:1px solid black;min-height:15px;width:88px;margin:0;}
+.selected{box-shadow:1px 1px 5px #222;}
+
+
+.bold{font-weight: bold;}
+.italic{font-style: italic;}
+.underline{text-decoration: underline;}
+th.sorted:AFTER {
+	content: ':sorted';
+}
