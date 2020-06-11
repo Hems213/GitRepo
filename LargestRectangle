@@ -1,0 +1,92 @@
+'use strict';
+
+const fs = require('fs');
+
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', inputStdin => {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', _ => {
+    inputString = inputString.replace(/\s*$/, '')
+        .split('\n')
+        .map(str => str.replace(/\s*$/, ''));
+
+    main();
+});
+
+function readLine() {
+    return inputString[currentLine++];
+}
+
+// Complete the largestRectangle function below.
+function largestRectangle(h) {
+    const rectanglesStack = [];
+    let maxRect = h[0];
+    rectanglesStack.push(makeRectange(0, h[0]));
+    for(let i=0; i<h.length; i++){
+        let currentRectHieght = h[i];
+        let lastRect = peekStack(rectanglesStack);
+        if(lastRect.rectHieght === currentRectHieght) {
+            //donothing proceed to next item
+        } else if(lastRect.rectHieght < currentRectHieght) {
+            //start a new rect at current position
+            rectanglesStack.push(makeRectange(i, currentRectHieght))
+        } else {
+            //find all rects ending in this point
+            let rectsEndingHere = removeAllRectsEndingat(currentRectHieght, rectanglesStack);
+            rectsEndingHere.forEach(rect => {
+                let area = rect.rectHieght*(i-rect.rectIndex);
+                maxRect = Math.max(maxRect, area);
+            });
+            //start a new rectangle at same position of last ended rect and  strart there
+            let lastEndRect = peekStack(rectsEndingHere);
+            rectanglesStack.push(makeRectange(lastEndRect.rectIndex,currentRectHieght));
+        }
+    }
+    while(rectanglesStack.length>0){
+        let remainingRect = rectanglesStack.pop();
+        let area = remainingRect.rectHieght*(h.length-remainingRect.rectIndex);
+        maxRect = Math.max(maxRect, area);
+        console.log('maxRect',maxRect);
+    }
+
+    return maxRect;
+}
+function peekStack(rectStack){
+    return rectStack[rectStack.length-1];
+}
+function removeAllRectsEndingat(rectHieght, rectStack){
+    const removableRects = [];
+    while(rectStack.length>0){
+        let latestRect = peekStack(rectStack);
+        if(latestRect.rectHieght>=rectHieght){
+            removableRects.push(rectStack.pop());
+        } else {
+            break;
+        }
+    }
+    return removableRects;
+}
+function makeRectange(index, height){
+    return {rectIndex:index, rectHieght:height}
+}
+function main() {
+    const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
+
+    const n = parseInt(readLine(), 10);
+
+    const h = readLine().split(' ').map(hTemp => parseInt(hTemp, 10));
+
+    let result = largestRectangle(h);
+
+    ws.write(result + "\n");
+
+    ws.end();
+}
+
