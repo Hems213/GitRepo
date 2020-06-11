@@ -1,0 +1,27 @@
+/*package whatever //do not write package name here */
+
+import java.io.*;
+import java.util.*;
+
+class MeetingRoomCount {
+	public static void main (String[] args) {
+	    int lectures[][] = {{0, 5}, {1, 2}, {6, 10}};
+	    Arrays.sort(lectures, (a, b)->{return a[0]-b[0];});
+	    System.out.println(Arrays.toString(lectures[0]));
+	    System.out.println(Arrays.toString(lectures[1]));
+	    System.out.println(Arrays.toString(lectures[2]));
+	    PriorityQueue pq = new PriorityQueue();
+	    int count = 1;
+	    pq.offer(lectures[0][1]);
+	    for(int i=1; i<lectures.length; i++){
+	        int[] lecture = lectures[i];
+	        if((int)pq.peek()>=lecture[0]){
+	            count++;
+	        } else {
+	            pq.poll();
+	        }
+            pq.offer(lecture[1]);
+	    }
+	    System.out.println(count);
+	}
+}
