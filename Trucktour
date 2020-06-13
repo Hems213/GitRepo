@@ -1,0 +1,69 @@
+'use strict';
+
+const fs = require('fs');
+
+process.stdin.resume();
+process.stdin.setEncoding('utf-8');
+
+let inputString = '';
+let currentLine = 0;
+
+process.stdin.on('data', inputStdin => {
+    inputString += inputStdin;
+});
+
+process.stdin.on('end', _ => {
+    inputString = inputString.trim().split('\n').map(str => str.trim());
+
+    main();
+});
+
+function readLine() {
+    return inputString[currentLine++];
+}
+
+/*
+ * Complete the truckTour function below.
+ */
+function truckTour(petrolpumps) {
+    /*
+     * Write your code here.
+     */
+    let currentPetrolCapacity = 0;
+    let startPumpIndex = 0;
+    let counter = 0;
+    let index=0;
+    while(counter<=petrolpumps.length){
+        index = index%petrolpumps.length;
+        let currentPump = petrolpumps[index];
+        currentPetrolCapacity += (currentPump[0]-currentPump[1]);
+        if(currentPetrolCapacity<0){
+            counter=0;
+            currentPetrolCapacity=0;
+            startPumpIndex = index+1;
+        } else {
+            counter++;
+        }
+        index++;
+    }
+    if(currentPetrolCapacity>=0) return startPumpIndex;
+    return -1;
+}
+
+function main() {
+    const ws = fs.createWriteStream(process.env.OUTPUT_PATH);
+
+    const n = parseInt(readLine(), 10);
+
+    let petrolpumps = Array(n);
+
+    for (let petrolpumpsRowItr = 0; petrolpumpsRowItr < n; petrolpumpsRowItr++) {
+        petrolpumps[petrolpumpsRowItr] = readLine().split(' ').map(petrolpumpsTemp => parseInt(petrolpumpsTemp, 10));
+    }
+
+    let result = truckTour(petrolpumps);
+
+    ws.write(result + "\n");
+
+    ws.end();
+}
