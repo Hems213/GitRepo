@@ -31,6 +31,7 @@ function truckTour(petrolpumps) {
      */
     let currentPetrolCapacity = 0;
     let startPumpIndex = 0;
+    petrolpumps[startPumpIndex].startedFromHere=true;
     let counter = 0;
     let index=0;
     while(counter<=petrolpumps.length){
@@ -41,6 +42,10 @@ function truckTour(petrolpumps) {
             counter=0;
             currentPetrolCapacity=0;
             startPumpIndex = index+1;
+            if(petrolpumps[startPumpIndex%petrolpumps.length].startedFromHere){
+                return -1;
+            }
+            petrolpumps[startPumpIndex].startedFromHere=true;
         } else {
             counter++;
         }
