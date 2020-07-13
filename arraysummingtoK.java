@@ -6,10 +6,30 @@ import java.util.HashSet;
 public class arraysummingtoK {
 
 	public static void main(String[] args) {
-		int[] input = { 3, 6, 9, 5, -1, -9 };
-		findSumofTwoSort(input, 10);
-		findSumofTwoHm(input, 10);
+		int[] input = { -9, 15,6, 9, -1 };
+		findSumofTwoSort(input, 6);
+		findSumofTwoHm(input, 6);
+		findSumOfThreeHm(input, 15);
 
+	}
+
+	private static void findSumOfThreeHm(int[] input, int sum) {
+		for(int i=0; i<input.length-1; i++) {
+			int currentNum = input[i];
+			int targetSum = sum - currentNum;
+			HashSet<Integer> hs = new HashSet<>();
+			for(int j=i;j<input.length; j++) {
+				int currentNum2 = input[j];
+				int complimentaryNum = targetSum - currentNum2; 
+				if(hs.contains(complimentaryNum)) {
+					System.out.println("Found the triplet "+currentNum+","+currentNum2+","+complimentaryNum);
+					return;
+				} else {
+					hs.add(currentNum2);
+				}
+			}
+		}
+		System.out.println("Unable to find triplet");
 	}
 
 	private static void findSumofTwoSort(int[] input, int i) {
