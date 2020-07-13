@@ -17,7 +17,7 @@ public class Boggle {
     	dictionary.add("GEEKS");
     	dictionary.add("FOR");
     	dictionary.add("GEEP");
-    	dictionary.add("GEEKO");
+    	dictionary.add("GEEKY");
     	dictionary.add("YESUI");
     	dictionary.add("KIZOP");
     	dictionary.add("QUIZ");
@@ -44,10 +44,17 @@ public class Boggle {
 
 	private static void findWords(char[][] boggle) {
 		boolean[][] visited = new boolean[boggle.length][boggle[0].length];
-		String result = "";
 		for(int i=0; i<boggle.length; i++) {
 			for(int j=0; j<boggle[i].length; j++) {
-				findWordsFrom(visited, boggle, i, j, result);
+				StringBuilder sb = new StringBuilder();
+				//boolean[] flag = {true};
+				findWordsFrom(visited, boggle, i, j, sb/*, flag*/);
+			}
+		}
+		for(int i=0; i<boggle.length; i++) {
+			for(int j=0; j<boggle[i].length; j++) {
+				String res = "";
+				findWordsFrom2(visited, boggle, i, j, res);
 			}
 		}
 		
@@ -55,22 +62,45 @@ public class Boggle {
 
 
 
-	private static void findWordsFrom(boolean[][] visited, char[][] boggle, int i, int j, String res) {
+	private static void findWordsFrom(boolean[][] visited, char[][] boggle, int i, int j, StringBuilder res/*, boolean[] flag*/) {
 		visited[i][j] = true;
-		res = res+boggle[i][j];
-		//System.out.println(i+","+j+",res="+res);
-		if(dictionary.contains(res)) {
-			System.out.println("Word found = "+res);
+		res = res.append(boggle[i][j]);
+		//System.out.println(i+","+j+",res="+res.toString());
+		if(dictionary.contains(res.toString())) {
+			System.out.println("Word found = "+res.toString());
 		}
 		
 		List<IndexPair> next8 = getNext8(i, j, boggle); 
 		//System.out.println(next8);
 		for(IndexPair index : next8) {
 			if(!visited[index.i][index.j]) {
-				findWordsFrom(visited, boggle, index.i, index.j, res);
+				findWordsFrom(visited, boggle, index.i, index.j, res/*, flag*/);
 			}
 		}
-		res="";
+//		if(flag[0]) {
+//			System.out.println("Word at end = "+res);
+//			flag[0]=false;
+//		}
+
+		res.deleteCharAt(res.length()-1);
+		visited[i][j]=false;
+	}
+	private static void findWordsFrom2(boolean[][] visited, char[][] boggle, int i, int j, String res) {
+		visited[i][j] = true;
+		res = res+boggle[i][j];
+		//System.out.println(i+","+j+",res="+res.toString());
+		if(dictionary.contains(res)) {
+			System.out.println("Word found 2 = "+res.toString());
+		}
+		
+		List<IndexPair> next8 = getNext8(i, j, boggle); 
+		//System.out.println(next8);
+		for(IndexPair index : next8) {
+			if(!visited[index.i][index.j]) {
+				findWordsFrom2(visited, boggle, index.i, index.j, res);
+			}
+		}
+		
 		visited[i][j]=false;
 	}
 
